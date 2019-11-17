@@ -1,6 +1,22 @@
-require 'yaml'
+require 'directors_database'
 
-def directors_database
-	rot13 = -> (s) { s.tr('A-Za-z', 'N-ZA-Mn-za-m') }
-  @_db ||= YAML.load(rot13.call(File.open("directors_db").read.to_s))
+def directors_totals(nds)
+  
+director_index = 0
+  totals = {}
+
+  while director_index < nds.length do
+    director_name = nds[director_index][:name]
+    totals[director_name] = 0
+    movie_index = 0
+
+    while movie_index < nds[director_index][:movies].length do
+      totals[director_name] += nds[director_index][:movies][movie_index][:worldwide_gross]
+      movie_index += 1
+    end
+
+    director_index += 1
+  end
+
+  totals
 end
